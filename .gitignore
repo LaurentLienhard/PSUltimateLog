@@ -1,5 +1,6 @@
 output/
 
+claude.md
 **.bak
 *.local.*
 !**/README.md
