@@ -1,3 +1,5 @@
+using module PSUltimateLog
+
 BeforeAll {
     $projectPath = "$($PSScriptRoot)\..\..\..\" | Convert-Path
 
@@ -60,14 +62,14 @@ Describe 'LogRecord' -Tag 'Unit' {
         }
 
         It 'works for each severity level' -ForEach @(
-            @{ Severity = [OtelSeverity]::TRACE; Number = 1;  Text = 'TRACE' }
-            @{ Severity = [OtelSeverity]::DEBUG; Number = 5;  Text = 'DEBUG' }
-            @{ Severity = [OtelSeverity]::INFO;  Number = 9;  Text = 'INFO'  }
-            @{ Severity = [OtelSeverity]::WARN;  Number = 13; Text = 'WARN'  }
-            @{ Severity = [OtelSeverity]::ERROR; Number = 17; Text = 'ERROR' }
-            @{ Severity = [OtelSeverity]::FATAL; Number = 21; Text = 'FATAL' }
+            @{ SeverityInt = 1;  Number = 1;  Text = 'TRACE' }
+            @{ SeverityInt = 5;  Number = 5;  Text = 'DEBUG' }
+            @{ SeverityInt = 9;  Number = 9;  Text = 'INFO'  }
+            @{ SeverityInt = 13; Number = 13; Text = 'WARN'  }
+            @{ SeverityInt = 17; Number = 17; Text = 'ERROR' }
+            @{ SeverityInt = 21; Number = 21; Text = 'FATAL' }
         ) {
-            $lr = [LogRecord]::new('msg', $Severity)
+            $lr = [LogRecord]::new('msg', [OtelSeverity]$SeverityInt)
             $lr.SeverityNumber | Should -Be $Number
             $lr.SeverityText   | Should -Be $Text
         }

@@ -123,7 +123,7 @@ Describe 'Quality for module' -Tags 'TestQuality' {
         $pssaResult = (Invoke-ScriptAnalyzer -Path $functionFile.FullName)
         $report = $pssaResult | Format-Table -AutoSize | Out-String -Width 110
         $pssaResult | Should -BeNullOrEmpty -Because `
-            "some rule triggered.`r`n`r`n $report"
+            "some rule triggered.`r`r $report"
     }
 }
 

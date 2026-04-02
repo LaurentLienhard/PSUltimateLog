@@ -27,7 +27,7 @@ class ResourceAttributes
         $this._attributes['os.type']                 = [ResourceAttributes]::DetectOsType()
         $this._attributes['process.pid']             = [System.Diagnostics.Process]::GetCurrentProcess().Id
         $this._attributes['process.runtime.name']    = 'PowerShell'
-        $this._attributes['process.runtime.version'] = $PSVersionTable.PSVersion.ToString()
+        $this._attributes['process.runtime.version'] = (Get-Variable -Name 'PSVersionTable' -ValueOnly).PSVersion.ToString()
     }
 
     # Sets or overwrites an attribute

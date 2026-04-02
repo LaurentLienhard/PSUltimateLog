@@ -1,3 +1,5 @@
+using module PSUltimateLog
+
 BeforeAll {
     $projectPath = "$($PSScriptRoot)\..\..\..\" | Convert-Path
 
@@ -279,7 +281,7 @@ Describe 'Logger' -Tag 'Unit' {
 
         It 'Shutdown marks registered FileExporter as shut down' {
             $logger = [Logger]::new('svc')
-            $exp    = [FileExporter]::new(Join-Path $TestDrive 'sd.jsonl')
+            $exp    = [FileExporter]::new((Join-Path $TestDrive 'sd.jsonl'))
             $logger.AddExporter($exp)
             $logger.Shutdown()
             $exp.IsShutdown | Should -BeTrue

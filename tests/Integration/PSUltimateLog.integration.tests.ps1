@@ -1,3 +1,5 @@
+using module PSUltimateLog
+
 BeforeAll {
     $projectPath = "$($PSScriptRoot)\..\.." | Convert-Path
 

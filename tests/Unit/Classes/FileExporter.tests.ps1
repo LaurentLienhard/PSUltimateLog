@@ -1,3 +1,5 @@
+using module PSUltimateLog
+
 BeforeAll {
     $projectPath = "$($PSScriptRoot)\..\..\..\" | Convert-Path
 
@@ -49,7 +51,7 @@ Describe 'FileExporter' -Tag 'Unit' {
             $exp.Export(@($record))
 
             $path | Should -Exist
-            $lines = Get-Content -Path $path
+            $lines = @(Get-Content -Path $path)
             $lines.Count | Should -Be 1
             { $lines[0] | ConvertFrom-Json } | Should -Not -Throw
         }
@@ -113,7 +115,7 @@ Describe 'FileExporter' -Tag 'Unit' {
     Context 'Flush' {
 
         It 'does not throw' {
-            $exp = [FileExporter]::new(Join-Path $TestDrive 'flush.jsonl')
+            $exp = [FileExporter]::new((Join-Path $TestDrive 'flush.jsonl'))
             { $exp.Flush() } | Should -Not -Throw
         }
     }

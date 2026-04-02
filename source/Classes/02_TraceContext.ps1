@@ -65,35 +65,35 @@ class TraceContext
             throw [System.FormatException]::new("Invalid traceparent format: '$Traceparent'.")
         }
 
-        $version = $parts[0]
-        $traceId = $parts[1]
-        $spanId  = $parts[2]
-        $flags   = $parts[3]
+        $parsedVersion = $parts[0]
+        $parsedTraceId = $parts[1]
+        $parsedSpanId  = $parts[2]
+        $parsedFlags   = $parts[3]
 
-        if ($version -ne '00')
+        if ($parsedVersion -ne '00')
         {
-            throw [System.FormatException]::new("Unsupported traceparent version: '$version'.")
+            throw [System.FormatException]::new("Unsupported traceparent version: '$parsedVersion'.")
         }
 
-        if ($traceId -notmatch '^[0-9a-f]{32}$' -or $traceId -eq ('0' * 32))
+        if ($parsedTraceId -notmatch '^[0-9a-f]{32}$' -or $parsedTraceId -eq ('0' * 32))
         {
-            throw [System.FormatException]::new("Invalid trace-id: '$traceId'.")
+            throw [System.FormatException]::new("Invalid trace-id: '$parsedTraceId'.")
         }
 
-        if ($spanId -notmatch '^[0-9a-f]{16}$' -or $spanId -eq ('0' * 16))
+        if ($parsedSpanId -notmatch '^[0-9a-f]{16}$' -or $parsedSpanId -eq ('0' * 16))
         {
-            throw [System.FormatException]::new("Invalid parent-id: '$spanId'.")
+            throw [System.FormatException]::new("Invalid parent-id: '$parsedSpanId'.")
         }
 
-        if ($flags -notmatch '^[0-9a-f]{2}$')
+        if ($parsedFlags -notmatch '^[0-9a-f]{2}$')
         {
-            throw [System.FormatException]::new("Invalid trace-flags: '$flags'.")
+            throw [System.FormatException]::new("Invalid trace-flags: '$parsedFlags'.")
         }
 
         return @{
-            TraceId    = $traceId
-            SpanId     = $spanId
-            TraceFlags = [System.Convert]::ToByte($flags, 16)
+            TraceId    = $parsedTraceId
+            SpanId     = $parsedSpanId
+            TraceFlags = [System.Convert]::ToByte($parsedFlags, 16)
         }
     }
 
