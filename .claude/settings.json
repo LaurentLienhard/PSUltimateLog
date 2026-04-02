@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:github.com)",
+      "WebSearch",
+      "WebFetch(domain:opentelemetry.io)",
+      "WebFetch(domain:www.w3.org)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:docs.bmad-method.org)",
+      "Bash(npx bmad-method:*)",
+      "Bash(npx bmad-method@latest install --ide claude-code --directory .)",
+      "WebFetch(domain:deepwiki.com)"
+    ]
+  }
+}
