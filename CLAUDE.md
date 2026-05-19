@@ -45,9 +45,51 @@ The built module is output to `output/module/PSUltimateLog/<version>/`.
 
 Test files discover the module by scanning `*\*.psd1` and use `InModuleScope $ProjectName { }` to access internal classes.
 
+## Language
+
+All code, comments, documentation, commit messages, and file content must be written in **English**, regardless of the language used in conversation.
+
+## Function comment-based help
+
+Every function must include a comment-based help block immediately after the `function` declaration line. The block must contain at minimum:
+
+- `.SYNOPSIS`
+- `.DESCRIPTION`
+- `.PARAMETER` — one entry per parameter
+- `.EXAMPLE` — **at least 4 diverse examples** covering typical use, edge cases, pipeline input, and advanced scenarios
+- `.OUTPUTS`
+
+```powershell
+function Verb-Noun {
+    <#
+    .SYNOPSIS
+        Short description.
+    .DESCRIPTION
+        Full description.
+    .PARAMETER ParamName
+        What this parameter does.
+    .EXAMPLE
+        Verb-Noun -ParamName 'value'
+        Description of example 1.
+    .EXAMPLE
+        Verb-Noun -ParamName 'other'
+        Description of example 2.
+    .EXAMPLE
+        'value' | Verb-Noun
+        Description of example 3 (pipeline).
+    .EXAMPLE
+        Verb-Noun -ParamName 'advanced' -OtherParam $x
+        Description of example 4 (advanced).
+    .OUTPUTS
+        [TypeName] Description.
+    #>
+    ...
+}
+```
+
 ## Key constraints
 
-- **Code coverage threshold is 85%** — enforced by the build pipeline (`build.yaml` → `CodeCoverageThreshold: 85`). New classes require corresponding Pester tests.
+- **Code coverage threshold is 70%** — enforced by the build pipeline (`build.yaml` → `CodeCoverageThreshold: 85`). New classes require corresponding Pester tests.
 - **Class load order is controlled by numeric filename prefix** — always prefix class files (e.g. `01_Foo.ps1`, `02_Bar.ps1`). Derived classes must have a higher number than their base.
 - **`source/PSUltimateLog.psm1` must remain empty** — ModuleBuilder merges all classes and functions into it at build time. Do not add code there directly.
 - **PSScriptAnalyzer** runs as part of QA tests — settings in `.vscode/analyzersettings.psd1`.
