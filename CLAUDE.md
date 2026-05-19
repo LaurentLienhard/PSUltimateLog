@@ -49,6 +49,15 @@ Test files discover the module by scanning `*\*.psd1` and use `InModuleScope $Pr
 
 All code, comments, documentation, commit messages, and file content must be written in **English**, regardless of the language used in conversation.
 
+## Design philosophy
+
+All logic must be implemented as **PowerShell classes** whenever possible. Processing belongs in **class methods**, not in standalone functions or scripts. Public functions in `source/Public/` are thin cmdlet wrappers that instantiate or call classes — they must not contain business logic themselves.
+
+When adding a feature, default to:
+1. Creating or extending a class in `source/Classes/`
+2. Putting all logic in a method on that class
+3. Exposing it via a minimal public function only if needed for the module's public API
+
 ## Function comment-based help
 
 Every function must include a comment-based help block immediately after the `function` declaration line. The block must contain at minimum:
