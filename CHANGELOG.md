@@ -5,6 +5,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Reset project to blank slate — removed all initial class implementations and tests
+- Added coding standards to CLAUDE.md: English-only, class-first design, comment-based help with 4+ examples, mandatory README and CHANGELOG update before each commit
+
+## [Unreleased]
+
 ### Added
 
 - For new features.

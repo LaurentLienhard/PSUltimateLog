@@ -105,4 +105,5 @@ function Verb-Noun {
 
 ## Version control
 
+- **Always update `README.md` and `CHANGELOG.md` before every commit** — any code change (new class, new function, behaviour change, bug fix) must be reflected in both files before staging.
 - **Always run `git push` after committing** — every commit must be pushed to keep the GitHub repository in sync with local changes.
