@@ -83,8 +83,6 @@ AliasesToExport = @()
 # DSC resources to export from this module
 DscResourcesToExport = @()
 
-# List of enums exported from this module
-EnumsToExport = @('LogLevel')
 
 # List of all modules packaged with this module
 # ModuleList = @()
