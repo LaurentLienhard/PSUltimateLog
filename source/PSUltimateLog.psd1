@@ -30,10 +30,10 @@ CompanyName = 'LIENHARD Laurent'
 Copyright = '(c) LIENHARD Laurent. All rights reserved.'
 
 # Description of the functionality provided by this module
-Description = 'a lot of fonction for a lot of stuff'
+Description = 'A cross-platform PowerShell logging module with OpenTelemetry-compliant structured JSON output'
 
 # Minimum version of the PowerShell engine required by this module
-PowerShellVersion = '5.0'
+PowerShellVersion = '7.0'
 
 # Name of the PowerShell host required by this module
 # PowerShellHostName = ''
@@ -69,7 +69,7 @@ RequiredModules = @()
 # NestedModules = @()
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-FunctionsToExport = @()
+FunctionsToExport = @('Initialize-Logger', 'Write-LogEntry')
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
 CmdletsToExport = @()
@@ -82,6 +82,9 @@ AliasesToExport = @()
 
 # DSC resources to export from this module
 DscResourcesToExport = @()
+
+# List of enums exported from this module
+EnumsToExport = @('LogLevel')
 
 # List of all modules packaged with this module
 # ModuleList = @()
