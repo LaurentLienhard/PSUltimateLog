@@ -95,21 +95,21 @@ Describe Write-LogEntry {
         }
     }
 
-    Context 'When using PassVerbose switch' {
-        It 'Should emit Write-Verbose when PassVerbose is set' {
-            $verboseOutput = Write-LogEntry -Message 'Verbose test' -PassVerbose -Verbose 4>&1
+    Context 'When using -Verbose parameter' {
+        It 'Should emit Write-Verbose when -Verbose is set' {
+            $verboseOutput = Write-LogEntry -Message 'Verbose test' -Verbose 4>&1
 
             $verboseOutput | Should -Not -BeNullOrEmpty
         }
 
-        It 'Should not emit Write-Verbose when PassVerbose is not set' {
-            $verboseOutput = Write-LogEntry -Message 'No verbose' -Verbose 4>&1
+        It 'Should not emit Write-Verbose when -Verbose is not set' {
+            $verboseOutput = Write-LogEntry -Message 'No verbose' 4>&1
 
             $verboseOutput | Should -BeNullOrEmpty
         }
 
         It 'Should include formatted message in verbose output' {
-            $verboseOutput = Write-LogEntry -Message 'Test message' -PassVerbose -Verbose 4>&1
+            $verboseOutput = Write-LogEntry -Message 'Test message' -Verbose 4>&1
 
             $verboseOutput -join '' | Should -Match 'Test message'
         }
@@ -143,7 +143,7 @@ Describe Write-LogEntry {
     Context 'When combining parameters' {
         It 'Should work with all parameters together' {
             $attrs = @{ 'request.id' = 'req123' }
-            Write-LogEntry -Message 'Complex test' -Level Warning -PassVerbose -Attributes $attrs
+            Write-LogEntry -Message 'Complex test' -Level Warning -Verbose -Attributes $attrs
 
             $content = Get-Content -Path $testFile | ConvertFrom-Json
             $content.body | Should -Be 'Complex test'

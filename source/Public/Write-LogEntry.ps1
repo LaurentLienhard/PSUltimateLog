@@ -16,22 +16,18 @@ function Write-LogEntry
     The severity level of the log entry. Valid values are: Trace, Debug, Info, Warning, Error, Fatal.
     Default is Info.
 
-    .PARAMETER PassVerbose
-    If specified, emits a simplified log message to Write-Verbose using the format
-    "[YYYY-MM-DD HH:mm:ss] [LEVEL] Message". This allows console visibility without the full JSON structure.
-
     .PARAMETER Attributes
     A hashtable of additional key-value pairs to include in the log entry as the 'attributes' field.
     Useful for custom context such as trace IDs, span IDs, or application-specific data.
 
     .EXAMPLE
-    Write-LogEntry -Message 'Application started' -Level Info -PassVerbose -Verbose
+    Write-LogEntry -Message 'Application started' -Level Info -Verbose
 
     .EXAMPLE
     Write-LogEntry -Message 'User authentication failed' -Level Warning -Attributes @{ userId = 'user123'; reason = 'invalid_password' }
 
     .EXAMPLE
-    'Processing item' | Write-LogEntry -Level Info -PassVerbose
+    'Processing item' | Write-LogEntry -Level Info -Verbose
 
     .NOTES
     Initialize-Logger must be called once per session before using Write-LogEntry.
@@ -51,10 +47,6 @@ function Write-LogEntry
         $Level = [LogLevel]::Info,
 
         [Parameter()]
-        [switch]
-        $PassVerbose,
-
-        [Parameter()]
         [hashtable]
         $Attributes = @{}
     )
@@ -66,6 +58,7 @@ function Write-LogEntry
             throw "Logger not initialized. Call Initialize-Logger before using Write-LogEntry."
         }
 
-        $script:PSUltimateLogLogger.Log($Message, $Level, $PassVerbose.IsPresent, $Attributes)
+        $shouldEmitVerbose = $PSBoundParameters.ContainsKey('Verbose') -or $VerbosePreference -eq 'Continue'
+        $script:PSUltimateLogLogger.Log($Message, $Level, $shouldEmitVerbose, $Attributes)
     }
 }

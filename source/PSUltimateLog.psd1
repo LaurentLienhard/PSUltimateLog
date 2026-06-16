@@ -83,7 +83,6 @@ AliasesToExport = @()
 # DSC resources to export from this module
 DscResourcesToExport = @()
 
-
 # List of all modules packaged with this module
 # ModuleList = @()
 
