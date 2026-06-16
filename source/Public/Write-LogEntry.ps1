@@ -16,18 +16,33 @@ function Write-LogEntry
     The severity level of the log entry. Valid values are: Trace, Debug, Info, Warning, Error, Fatal.
     Default is Info.
 
+    .PARAMETER ScriptName
+    The name of the script being executed (e.g. 'Install-CatoClient.ps1').
+    Automatically added to log attributes as 'script.name'.
+
+    .PARAMETER ActionStep
+    The current step or phase within the script (e.g. 'Neutralization_Zscaler', 'Installation_MSI').
+    Automatically added to log attributes as 'action.step'.
+
+    .PARAMETER ErrorType
+    In case of an error, the exception type (e.g. 'System.UnauthorizedAccessException').
+    Automatically added to log attributes as 'error.type'.
+
     .PARAMETER Attributes
-    A hashtable of additional key-value pairs to include in the log entry as the 'attributes' field.
-    Useful for custom context such as trace IDs, span IDs, or application-specific data.
+    A hashtable of additional custom key-value pairs for the log entry.
+    Useful for application-specific data beyond the standard SysAdmin context.
 
     .EXAMPLE
-    Write-LogEntry -Message 'Application started' -Level Info -Verbose
+    Write-LogEntry -Message 'Zscaler neutralized' -Level Info -ScriptName 'Install-CatoClient.ps1' -ActionStep 'Neutralization' -Verbose
 
     .EXAMPLE
-    Write-LogEntry -Message 'User authentication failed' -Level Warning -Attributes @{ userId = 'user123'; reason = 'invalid_password' }
+    Write-LogEntry -Message 'Service started' -Level Info -ScriptName 'Deploy-Service.ps1' -ActionStep 'Service_Start' -Verbose
 
     .EXAMPLE
-    'Processing item' | Write-LogEntry -Level Info -Verbose
+    try { Stop-Service CatoClient } catch { Write-LogEntry -Message "Failed to stop service" -Level Error -ErrorType $_.Exception.GetType().Name -Attributes @{ errorMessage = $_.Exception.Message } }
+
+    .EXAMPLE
+    'Processing' | Write-LogEntry -Level Info -Verbose
 
     .NOTES
     Initialize-Logger must be called once per session before using Write-LogEntry.
@@ -47,6 +62,18 @@ function Write-LogEntry
         $Level = [LogLevel]::Info,
 
         [Parameter()]
+        [string]
+        $ScriptName,
+
+        [Parameter()]
+        [string]
+        $ActionStep,
+
+        [Parameter()]
+        [string]
+        $ErrorType,
+
+        [Parameter()]
         [hashtable]
         $Attributes = @{}
     )
@@ -58,7 +85,24 @@ function Write-LogEntry
             throw "Logger not initialized. Call Initialize-Logger before using Write-LogEntry."
         }
 
+        $contextAttributes = $Attributes.Clone()
+
+        if (-not [string]::IsNullOrEmpty($ScriptName))
+        {
+            $contextAttributes['script.name'] = $ScriptName
+        }
+
+        if (-not [string]::IsNullOrEmpty($ActionStep))
+        {
+            $contextAttributes['action.step'] = $ActionStep
+        }
+
+        if (-not [string]::IsNullOrEmpty($ErrorType))
+        {
+            $contextAttributes['error.type'] = $ErrorType
+        }
+
         $shouldEmitVerbose = $PSBoundParameters.ContainsKey('Verbose') -or $VerbosePreference -eq 'Continue'
-        $script:PSUltimateLogLogger.Log($Message, $Level, $shouldEmitVerbose, $Attributes)
+        $script:PSUltimateLogLogger.Log($Message, $Level, $shouldEmitVerbose, $contextAttributes)
     }
 }

@@ -46,7 +46,7 @@ InModuleScope $ProjectName {
                 $testFile = Join-Path -Path $TestDrive -ChildPath 'newfile.jsonl'
                 $writer = [LogFileWriter]::new($testFile)
 
-                $entry = [LogEntry]::new('Test message', [LogLevel]::Info, @{}, @{})
+                $entry = [LogEntry]::new('Test message', [LogLevel]::Info, '', @{}, @{})
                 $writer.Write($entry)
 
                 Test-Path -Path $testFile | Should -Be $true
@@ -56,8 +56,8 @@ InModuleScope $ProjectName {
                 $testFile = Join-Path -Path $TestDrive -ChildPath 'append.jsonl'
                 $writer = [LogFileWriter]::new($testFile)
 
-                $entry1 = [LogEntry]::new('Message 1', [LogLevel]::Info, @{}, @{})
-                $entry2 = [LogEntry]::new('Message 2', [LogLevel]::Error, @{}, @{})
+                $entry1 = [LogEntry]::new('Message 1', [LogLevel]::Info, '', @{}, @{})
+                $entry2 = [LogEntry]::new('Message 2', [LogLevel]::Error, '', @{}, @{})
 
                 $writer.Write($entry1)
                 $writer.Write($entry2)
@@ -70,7 +70,7 @@ InModuleScope $ProjectName {
                 $testFile = Join-Path -Path $TestDrive -ChildPath 'valid.jsonl'
                 $writer = [LogFileWriter]::new($testFile)
 
-                $entry = [LogEntry]::new('Test', [LogLevel]::Info, @{}, @{})
+                $entry = [LogEntry]::new('Test', [LogLevel]::Info, '', @{}, @{})
                 $writer.Write($entry)
 
                 $line = Get-Content -Path $testFile -Raw
@@ -81,7 +81,7 @@ InModuleScope $ProjectName {
                 $testFile = Join-Path -Path $TestDrive -ChildPath 'encoding.jsonl'
                 $writer = [LogFileWriter]::new($testFile)
 
-                $entry = [LogEntry]::new('Ü unicode test', [LogLevel]::Info, @{}, @{})
+                $entry = [LogEntry]::new('Ü unicode test', [LogLevel]::Info, '', @{}, @{})
                 $writer.Write($entry)
 
                 $line = Get-Content -Path $testFile -Encoding UTF8 -Raw

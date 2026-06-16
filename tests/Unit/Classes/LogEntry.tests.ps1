@@ -18,7 +18,7 @@ InModuleScope $ProjectName {
             It 'Creates a LogEntry with correct properties' {
                 $resource = @{ 'service.name' = 'TestApp'; 'service.version' = '1.0.0' }
                 $attributes = @{ 'custom.key' = 'custom.value' }
-                $entry = [LogEntry]::new('Test message', [LogLevel]::Info, $resource, $attributes)
+                $entry = [LogEntry]::new('Test message', [LogLevel]::Info, '', $resource, $attributes)
 
                 $entry | Should -Not -BeNullOrEmpty
                 $entry.Body | Should -Be 'Test message'
@@ -29,7 +29,7 @@ InModuleScope $ProjectName {
             }
 
             It 'Captures timestamp in UTC' {
-                $entry = [LogEntry]::new('Test', [LogLevel]::Info, @{}, @{})
+                $entry = [LogEntry]::new('Test', [LogLevel]::Info, '', @{}, @{})
                 $entry.Timestamp | Should -Not -BeNullOrEmpty
                 $entry.Timestamp.Kind | Should -Be 'Utc'
             }
@@ -43,7 +43,7 @@ InModuleScope $ProjectName {
                     @{ Level = [LogLevel]::Error; Expected = 'ERROR' }
                     @{ Level = [LogLevel]::Fatal; Expected = 'FATAL' }
                 ) | ForEach-Object {
-                    $entry = [LogEntry]::new('Test', $_.Level, @{}, @{})
+                    $entry = [LogEntry]::new('Test', $_.Level, '', @{}, @{})
                     $entry.Severity | Should -Be $_.Expected
                 }
             }
@@ -51,14 +51,14 @@ InModuleScope $ProjectName {
 
         Context 'ToJson method' {
             It 'Returns valid JSON string' {
-                $entry = [LogEntry]::new('Test message', [LogLevel]::Info, @{ 'service.name' = 'TestApp' }, @{})
+                $entry = [LogEntry]::new('Test message', [LogLevel]::Info, '', @{ 'service.name' = 'TestApp' }, @{})
                 $json = $entry.ToJson()
 
                 { $json | ConvertFrom-Json -ErrorAction Stop } | Should -Not -Throw
             }
 
             It 'Includes all required fields in JSON' {
-                $entry = [LogEntry]::new('Test message', [LogLevel]::Info, @{ 'service.name' = 'TestApp' }, @{ 'key' = 'value' })
+                $entry = [LogEntry]::new('Test message', [LogLevel]::Info, '', @{ 'service.name' = 'TestApp' }, @{ 'key' = 'value' })
                 $json = $entry.ToJson() | ConvertFrom-Json
 
                 $json.timestamp | Should -Not -BeNullOrEmpty
@@ -70,7 +70,7 @@ InModuleScope $ProjectName {
             }
 
             It 'Includes timestamp in JSON output' {
-                $entry = [LogEntry]::new('Test', [LogLevel]::Info, @{}, @{})
+                $entry = [LogEntry]::new('Test', [LogLevel]::Info, '', @{}, @{})
                 $json = $entry.ToJson() | ConvertFrom-Json
 
                 # Verify timestamp is present
@@ -78,7 +78,7 @@ InModuleScope $ProjectName {
             }
 
             It 'Returns single-line JSON (no newlines)' {
-                $entry = [LogEntry]::new('Test message', [LogLevel]::Info, @{}, @{})
+                $entry = [LogEntry]::new('Test message', [LogLevel]::Info, '', @{}, @{})
                 $json = $entry.ToJson()
 
                 $json | Should -Not -Match '`n|`r'
@@ -87,14 +87,14 @@ InModuleScope $ProjectName {
 
         Context 'ToVerboseString method' {
             It 'Returns formatted string with correct structure' {
-                $entry = [LogEntry]::new('Test message', [LogLevel]::Info, @{}, @{})
+                $entry = [LogEntry]::new('Test message', [LogLevel]::Info, '', @{}, @{})
                 $verbose = $entry.ToVerboseString()
 
                 $verbose | Should -Match '^\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\] \[INFO\] Test message$'
             }
 
             It 'Includes timestamp, level, and message' {
-                $entry = [LogEntry]::new('Processing complete', [LogLevel]::Error, @{}, @{})
+                $entry = [LogEntry]::new('Processing complete', [LogLevel]::Error, '', @{}, @{})
                 $verbose = $entry.ToVerboseString()
 
                 $verbose | Should -Match 'ERROR'

@@ -17,7 +17,7 @@ InModuleScope $ProjectName {
         Context 'Constructor' {
             It 'Initializes required properties' {
                 $testFile = Join-Path -Path $TestDrive -ChildPath 'test.jsonl'
-                $logger = [Logger]::new($testFile, 'TestApp', '1.0.0')
+                $logger = [Logger]::new($testFile, 'TestApp', '1.0.0', '')
 
                 $logger.ServiceName | Should -Be 'TestApp'
                 $logger.ServiceVersion | Should -Be '1.0.0'
@@ -28,14 +28,14 @@ InModuleScope $ProjectName {
 
             It 'Captures hostname' {
                 $testFile = Join-Path -Path $TestDrive -ChildPath 'test.jsonl'
-                $logger = [Logger]::new($testFile, 'TestApp', '1.0.0')
+                $logger = [Logger]::new($testFile, 'TestApp', '1.0.0', '')
 
                 $logger.HostName | Should -Not -BeNullOrEmpty
             }
 
             It 'Captures OS type' {
                 $testFile = Join-Path -Path $TestDrive -ChildPath 'test.jsonl'
-                $logger = [Logger]::new($testFile, 'TestApp', '1.0.0')
+                $logger = [Logger]::new($testFile, 'TestApp', '1.0.0', '')
 
                 $logger.OsType | Should -Not -BeNullOrEmpty
             }
@@ -44,7 +44,7 @@ InModuleScope $ProjectName {
         Context 'Log method' {
             It 'Writes entry to file' {
                 $testFile = Join-Path -Path $TestDrive -ChildPath 'log.jsonl'
-                $logger = [Logger]::new($testFile, 'TestApp', '1.0.0')
+                $logger = [Logger]::new($testFile, 'TestApp', '1.0.0', '')
 
                 $logger.Log('Test message', [LogLevel]::Info, $false, @{})
 
@@ -54,7 +54,7 @@ InModuleScope $ProjectName {
 
             It 'Includes resource information in written entry' {
                 $testFile = Join-Path -Path $TestDrive -ChildPath 'resource.jsonl'
-                $logger = [Logger]::new($testFile, 'MyService', '2.5.0')
+                $logger = [Logger]::new($testFile, 'MyService', '2.5.0', '')
 
                 $logger.Log('Test', [LogLevel]::Info, $false, @{})
 
@@ -67,7 +67,7 @@ InModuleScope $ProjectName {
 
             It 'Includes additional attributes in entry' {
                 $testFile = Join-Path -Path $TestDrive -ChildPath 'attributes.jsonl'
-                $logger = [Logger]::new($testFile, 'TestApp', '1.0.0')
+                $logger = [Logger]::new($testFile, 'TestApp', '1.0.0', '')
 
                 $attrs = @{ 'trace.id' = 'abc123'; 'user.id' = 'user456' }
                 $logger.Log('Test', [LogLevel]::Info, $false, $attrs)
@@ -79,7 +79,7 @@ InModuleScope $ProjectName {
 
             It 'Emits Write-Verbose when emitVerbose is true' {
                 $testFile = Join-Path -Path $TestDrive -ChildPath 'verbose.jsonl'
-                $logger = [Logger]::new($testFile, 'TestApp', '1.0.0')
+                $logger = [Logger]::new($testFile, 'TestApp', '1.0.0', '')
 
                 $VerbosePreference = 'Continue'
                 $logger.Log('Test message', [LogLevel]::Warning, $true, @{}) 4>&1 | Out-Null
@@ -88,7 +88,7 @@ InModuleScope $ProjectName {
 
             It 'Does not emit Write-Verbose when emitVerbose is false' {
                 $testFile = Join-Path -Path $TestDrive -ChildPath 'noverbose.jsonl'
-                $logger = [Logger]::new($testFile, 'TestApp', '1.0.0')
+                $logger = [Logger]::new($testFile, 'TestApp', '1.0.0', '')
 
                 $VerbosePreference = 'Continue'
                 $output = $logger.Log('Test message', [LogLevel]::Info, $false, @{}) 4>&1
@@ -99,7 +99,7 @@ InModuleScope $ProjectName {
 
             It 'Handles empty attributes hashtable' {
                 $testFile = Join-Path -Path $TestDrive -ChildPath 'empty.jsonl'
-                $logger = [Logger]::new($testFile, 'TestApp', '1.0.0')
+                $logger = [Logger]::new($testFile, 'TestApp', '1.0.0', '')
 
                 { $logger.Log('Test', [LogLevel]::Info, $false, @{}) } | Should -Not -Throw
 
@@ -109,7 +109,7 @@ InModuleScope $ProjectName {
 
             It 'Works with multiple log levels' {
                 $testFile = Join-Path -Path $TestDrive -ChildPath 'levels.jsonl'
-                $logger = [Logger]::new($testFile, 'TestApp', '1.0.0')
+                $logger = [Logger]::new($testFile, 'TestApp', '1.0.0', '')
 
                 @(
                     @{ Level = [LogLevel]::Trace; Message = 'Trace' }

@@ -12,6 +12,35 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **All code, comments, documentation, examples, and variable names must be written in English**, regardless of conversation language. This ensures the codebase is accessible to all contributors.
 
+### OpenTelemetry (SysAdmin Pragmatic Approach)
+
+The module implements **pragmatic OpenTelemetry** designed for system administration scripts, not full distributed tracing:
+
+**Core Fields (mandatory for every log):**
+- `timestamp` — UTC ISO 8601 format for timezone-safe logging
+- `severity` + `severityNumber` — OTel-compliant severity mapping (Info=9, Warning=13, Error=17, etc.)
+- `body` — Short, clear message (not a data dump)
+- `traceId` — Unique identifier for correlating all logs from a single script execution
+
+**Resource Attributes (system context):**
+- `service.name`, `service.version` — Application metadata
+- `host.name` — Machine identifier (performance: uses `[Environment]::MachineName`)
+- `os.type` — OS description (performance: uses native .NET, no WMI calls)
+- `process.pid` — Current process ID
+- `process.runas` — Executing user account
+
+**Log Attributes (application context):**
+- `script.name` — Name of the executing PowerShell script
+- `action.step` — Current logical step (e.g., "Installation_MSI", "Service_Stop")
+- `error.type` — Exception type on failures
+- Custom key/value pairs for business-specific context
+
+**Performance Philosophy:**
+- Ban WMI/CIM calls (too slow) → use `[Environment]` and .NET natives
+- Pre-compute context at logger initialization → cache in Logger instance
+- Atomic file writes (`System.IO.File.AppendAllText`) → no race conditions
+- No unnecessary metadata → keep JSON lean for high-frequency logging
+
 ### Object-Oriented Design with Classes
 
 The architecture emphasizes **class-based design with public functions as interfaces**:

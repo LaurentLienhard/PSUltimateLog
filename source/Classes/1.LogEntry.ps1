@@ -4,12 +4,14 @@ class LogEntry
     [string]$Severity
     [int]$SeverityNumber
     [string]$Body
+    [string]$TraceId
     [hashtable]$Resource
     [hashtable]$Attributes
 
     LogEntry(
         [string]$message,
         [LogLevel]$level,
+        [string]$traceId,
         [hashtable]$resource,
         [hashtable]$attributes
     )
@@ -18,6 +20,7 @@ class LogEntry
         $this.Severity = $level.ToString().ToUpper()
         $this.SeverityNumber = [int]$level
         $this.Body = $message
+        $this.TraceId = $traceId
         $this.Resource = $resource
         $this.Attributes = $attributes
     }
@@ -29,6 +32,7 @@ class LogEntry
             severity        = $this.Severity
             severityNumber  = $this.SeverityNumber
             body            = $this.Body
+            traceId         = $this.TraceId
             resource        = $this.Resource
             attributes      = $this.Attributes
         }
